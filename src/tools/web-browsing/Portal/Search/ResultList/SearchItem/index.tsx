@@ -1,10 +1,10 @@
-import { Typography } from 'antd';
+import { Text } from '@lobehub/ui';
 import { createStyles } from 'antd-style';
 import { memo } from 'react';
 import { Flexbox } from 'react-layout-kit';
 
 import WebFavicon from '@/components/WebFavicon';
-import { SearchResult } from '@/types/tool/search';
+import { UniformSearchResult } from '@/types/tool/search';
 
 import TitleExtra from './TitleExtra';
 import Video from './Video';
@@ -52,7 +52,7 @@ const useStyles = createStyles(({ css, token }) => {
   };
 });
 
-interface SearchResultProps extends SearchResult {
+interface SearchResultProps extends UniformSearchResult {
   highlight?: boolean;
 }
 
@@ -78,9 +78,9 @@ const SearchItem = memo<SearchResultProps>((props) => {
               score={score}
             />
           </Flexbox>
-          <Typography.Text className={styles.url} type={'secondary'}>
+          <Text className={styles.url} type={'secondary'}>
             {url}
-          </Typography.Text>
+          </Text>
           <Flexbox className={styles.desc}>{content}</Flexbox>
         </Flexbox>
       </Flexbox>

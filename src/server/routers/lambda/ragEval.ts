@@ -13,10 +13,9 @@ import {
   EvalEvaluationModel,
   EvaluationRecordModel,
 } from '@/database/server/models/ragEval';
-import { authedProcedure, router } from '@/libs/trpc';
-import { serverDatabase } from '@/libs/trpc/lambda';
-import { keyVaults } from '@/libs/trpc/middleware/keyVaults';
-import { createAsyncServerClient } from '@/server/routers/async';
+import { authedProcedure, router } from '@/libs/trpc/lambda';
+import { keyVaults, serverDatabase } from '@/libs/trpc/lambda/middleware';
+import { createAsyncCaller } from '@/server/routers/async';
 import { FileService } from '@/server/services/file';
 import {
   EvalDatasetRecord,
@@ -41,7 +40,7 @@ const ragEvalProcedure = authedProcedure
         datasetRecordModel: new EvalDatasetRecordModel(ctx.userId),
         evaluationModel: new EvalEvaluationModel(ctx.userId),
         evaluationRecordModel: new EvaluationRecordModel(ctx.userId),
-        fileService: new FileService(),
+        fileService: new FileService(ctx.serverDB, ctx.userId),
       },
     });
   });
@@ -202,15 +201,18 @@ export const ragEvalRouter = router({
         })),
       );
 
-      const asyncCaller = await createAsyncServerClient(ctx.userId, ctx.jwtPayload);
+      const asyncCaller = await createAsyncCaller({
+        userId: ctx.userId,
+        jwtPayload: ctx.jwtPayload,
+      });
 
       await ctx.evaluationModel.update(input.id, { status: EvalEvaluationStatus.Processing });
       try {
         await pMap(
           evalRecords,
           async (record) => {
-            asyncCaller.ragEval.runRecordEvaluation
-              .mutate({ evalRecordId: record.id })
+            asyncCaller.ragEval
+              .runRecordEvaluation({ evalRecordId: record.id })
               .catch(async (e) => {
                 await ctx.evaluationModel.update(input.id, { status: EvalEvaluationStatus.Error });
 

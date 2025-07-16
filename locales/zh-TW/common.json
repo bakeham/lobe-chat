@@ -183,6 +183,7 @@
   },
   "fullscreen": "全螢幕模式",
   "historyRange": "歷史範圍",
+  "import": "匯入",
   "importData": "匯入資料",
   "importModal": {
     "error": {
@@ -284,6 +285,8 @@
   "rename": "重新命名",
   "reset": "重置",
   "retry": "重試",
+  "run": "執行",
+  "save": "儲存",
   "send": "發送",
   "setting": "設定",
   "share": "分享",
@@ -322,6 +325,7 @@
     }
   },
   "tab": {
+    "aiImage": "AI 繪畫",
     "chat": "對話",
     "discover": "發現",
     "files": "檔案",

@@ -33,11 +33,24 @@ const nextConfig: NextConfig = {
       '@lobehub/ui',
       'gpt-tokenizer',
     ],
+    // oidc provider depend on constructor.name
+    // but swc minification will remove the name
+    // so we need to disable it
+    // refs: https://github.com/lobehub/lobe-chat/pull/7430
+    serverMinification: false,
     webVitalsAttribution: ['CLS', 'LCP'],
-    webpackMemoryOptimizations: true,
   },
   async headers() {
     return [
+      {
+        headers: [
+          {
+            key: 'x-robots-tag',
+            value: 'all',
+          },
+        ],
+        source: '/:path*',
+      },
       {
         headers: [
           {
@@ -53,6 +66,14 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Vercel-CDN-Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
         source: '/images/(.*).(png|jpe?g|gif|svg|ico|webp)',
       },
@@ -60,6 +81,14 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Vercel-CDN-Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
         ],
@@ -71,6 +100,14 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Vercel-CDN-Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
         source: '/screenshots/(.*).(png|jpe?g|gif|svg|ico|webp)',
       },
@@ -78,6 +115,14 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'Vercel-CDN-Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
         ],
@@ -89,6 +134,10 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
         source: '/favicon.ico',
       },
@@ -98,6 +147,10 @@ const nextConfig: NextConfig = {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
         source: '/favicon-32x32.ico',
       },
@@ -105,6 +158,10 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+          {
+            key: 'CDN-Cache-Control',
             value: 'public, max-age=31536000, immutable',
           },
         ],
@@ -131,41 +188,39 @@ const nextConfig: NextConfig = {
       source: '/sitemap-0.xml',
     },
     {
+      destination: '/sitemap/plugins-1.xml',
+      permanent: true,
+      source: '/sitemap/plugins.xml',
+    },
+    {
+      destination: '/sitemap/assistants-1.xml',
+      permanent: true,
+      source: '/sitemap/assistants.xml',
+    },
+    {
       destination: '/manifest.webmanifest',
       permanent: true,
       source: '/manifest.json',
     },
     {
-      destination: '/discover/assistant/:slug',
-      has: [
-        {
-          key: 'agent',
-          type: 'query',
-          value: '(?<slug>.*)',
-        },
-      ],
+      destination: '/discover/assistant',
       permanent: true,
-      source: '/market',
+      source: '/discover/assistants',
     },
     {
-      destination: '/discover/assistants',
+      destination: '/discover/plugin',
       permanent: true,
-      source: '/discover/assistant',
+      source: '/discover/plugins',
     },
     {
-      destination: '/discover/models',
+      destination: '/discover/model',
       permanent: true,
-      source: '/discover/model',
+      source: '/discover/models',
     },
     {
-      destination: '/discover/plugins',
+      destination: '/discover/provider',
       permanent: true,
-      source: '/discover/plugin',
-    },
-    {
-      destination: '/discover/providers',
-      permanent: true,
-      source: '/discover/provider',
+      source: '/discover/providers',
     },
     {
       destination: '/settings/common',

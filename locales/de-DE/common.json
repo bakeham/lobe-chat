@@ -183,6 +183,7 @@
   },
   "fullscreen": "Vollbildmodus",
   "historyRange": "Verlaufsbereich",
+  "import": "Importieren",
   "importData": "Daten importieren",
   "importModal": {
     "error": {
@@ -284,6 +285,8 @@
   "rename": "Umbenennen",
   "reset": "Zurücksetzen",
   "retry": "Erneut versuchen",
+  "run": "Ausführen",
+  "save": "Speichern",
   "send": "Senden",
   "setting": "Einstellung",
   "share": "Teilen",
@@ -322,6 +325,7 @@
     }
   },
   "tab": {
+    "aiImage": "KI-Gemälde",
     "chat": "Chat",
     "discover": "Entdecken",
     "files": "Dateien",
